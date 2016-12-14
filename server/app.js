@@ -4,7 +4,27 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var cloudinary = require('cloudinary');
 var access = require('../access-tokens.json');
-var image = require('../models/images.js');
+
+//MONGO
+var mongoose = require("mongoose");
+var mongoURI =
+    process.env.MONGODB_URI ||
+    process.env.MONGOHQ_URL ||
+    'mongodb://127.0.0.1:27017/girls-are-powerful';
+
+var MongoDB = mongoose.connect(mongoURI).connection;
+
+
+MongoDB.on("error", function(err) {
+    console.log("Mongo Connection Error: ", err);
+});
+
+MongoDB.once("open", function(err) {
+    console.log("Mongo Connection Open on: ", mongoURI);
+});
+
+var image = require('./models/images.js');
+
 
 
 cloudinary.config({
@@ -23,18 +43,18 @@ app.use(bodyParser.urlencoded({
 
 
 
-// Testing
-
-var image = path.join(__dirname,'EvanTransparent.png');
-
-cloudinary.uploader.upload(image, function(result) {
-
-  console.log(result);
-});
-
-cloudinary.api.resource('sample',
-  function(result)  { console.log(result) });
-
+// // Testing
+//
+// var image = path.join(__dirname,'EvanTransparent.png');
+//
+// cloudinary.uploader.upload(image, function(result) {
+//
+//   console.log(result);
+// });
+//
+// cloudinary.api.resource('sample',
+//   function(result)  { console.log(result) });
+//
 
 
 /************************************/
@@ -77,10 +97,7 @@ app.post('/upload-image', function(req,res){
 });
 
 
-app.get('/test',function(req,res){
-  var file = req.params[0] || "/views/index.html";
-  res.sendFile(path.join(__dirname,"/public/", file));
-});
+
 
 app.get("/*", function(req,res){
   var file = req.params[0] || "/views/index.html";
