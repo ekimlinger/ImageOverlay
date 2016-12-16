@@ -1,3 +1,22 @@
+body{
+  text-align: center;
+  font-family: "verdana",veranda,serif;
+}
+
+.image-uploader{
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 10px;
+  margin: 10px;
+}
 .uploaded-image{
   width: 600px;
+  padding: 10px;
+  border: 3px solid grey;
+  border-radius: 10px;
+}
+.disclaimer{
+  margin: 10px auto;
+  width: 300px;
+  font-size: 8px;
 }

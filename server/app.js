@@ -35,9 +35,9 @@ cloudinary.config({
 
 console.log(access.cloud_name, " ", access.api_key," ", access.api_secret);
 
-app.use(bodyParser.json({limit: '30mb'}));
+app.use(bodyParser.json({limit: '10mb'}));
 app.use(bodyParser.urlencoded({
-    limit: '30mb',
+    limit: '10mb',
     extended: true
 }));
 
