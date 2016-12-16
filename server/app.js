@@ -23,7 +23,7 @@ MongoDB.once("open", function(err) {
     console.log("Mongo Connection Open on: ", mongoURI);
 });
 
-var image = require('./models/images.js');
+var Image = require('./models/images.js');
 
 
 
@@ -43,31 +43,19 @@ app.use(bodyParser.urlencoded({
 
 
 
-// // Testing
-//
-// var image = path.join(__dirname,'EvanTransparent.png');
-//
-// cloudinary.uploader.upload(image, function(result) {
-//
-//   console.log(result);
-// });
-//
-// cloudinary.api.resource('sample',
-//   function(result)  { console.log(result) });
-//
-
-
 /************************************/
 
 
 
 app.post('/upload-image', function(req,res){
-  var image = req.body.image;
-
-  cloudinary.uploader.upload(image, function(result) {
+  var image = req.body;
+  console.log("Got image: ", image.imageName);
+  cloudinary.uploader.upload(
+    image.imageBody,
+    function(result) {
     // Test to see if the image upload succeeded,
     // if not throw error
-
+    console.log("Got stuff back from server");
     // Save image information to the database
     var storedImage = new Image({
       public_id: result.public_id,
@@ -85,22 +73,30 @@ app.post('/upload-image', function(req,res){
       url: result.url,
       secure_url: result.secure_url,
       original_filename: result.original_filename
+
     });
-    // Format image that was stored
-    cloudinary.image(result.public_id, { width: 600 });
 
-    // Send image url back to database
+    console.log(result);
+
     res.send(result.secure_url);
-  });
 
-  res.status(200).send("Posted image successfully");
+  },{transformation: 'bottom_overlay'}
+  );
+
+
+
+
+
+  // Need error handling
+  // res.status(200).send("Posted image successfully");
+
 });
 
 
 
 
 app.get("/*", function(req,res){
-  var file = req.params[0] || "/views/index.html";
+  var file = req.params[0] || "assets/views/index.html";
   res.sendFile(path.join(__dirname,"/public/", file));
   // Send documentation on how to use API
 });
