@@ -80,7 +80,7 @@ app.post('/upload-image', function(req,res){
 
     res.send(result.secure_url);
 
-  },{transformation: 'bottom_overlay'}
+  },{transformation: 'frame_powerful'}
   );
 
 
